@@ -35,20 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
   var gridDiv = document.querySelector('#myGrid');
   new agGrid.Grid(gridDiv, gridOptions);
 
-  /*
-  agGrid.simpleHttpRequest({url: 'https://raw.githubusercontent.com/ag-grid/ag-grid/master/packages/ag-grid-docs/src/olympicWinners.json'}).then(function(data) {
-      // add id to data
-      var idSequence = 0;
-      data.forEach( function(item) {
-        item.id = idSequence++;
-      });
-
-      var server = new FakeServer(data);
-      var datasource = new ServerSideDatasource();
-      gridOptions.api.setServerSideDatasource(datasource);
-  });
-    
-  */
   var datasource = new ServerSideDatasource();
   gridOptions.api.setServerSideDatasource(datasource);
 });
@@ -56,12 +42,9 @@ document.addEventListener('DOMContentLoaded', function() {
 function ServerSideDatasource() {
   return {
     getRows(params) {
-      // adding delay to simulate real sever call
-
-      // var response = server.getResponse(params.request);
       console.log('params.request', params.request);
       console.log('params', params);
-      agGrid.simpleHttpRequest({ url: '/data?startRow='+params.request.startRow+'&endRow='+params.request.endRow }, params.request).then(function(response) {
+      agGrid.simpleHttpRequest({ url: '/data?startRow='+params.request.startRow+'&endRow='+params.request.endRow }).then(function(response) {
         if (response.success) {
           // call the success callback
           params.successCallback(response.rows, response.lastRow);
@@ -74,26 +57,3 @@ function ServerSideDatasource() {
     }
   };
 }
-
-/*
-function FakeServer(allData) {
-  return {
-    getResponse(request) {
-      console.log('asking for rows: ' + request.startRow + ' to ' + request.endRow);
-
-      // take a slice of the total rows
-      var rowsThisPage = allData.slice(request.startRow, request.endRow);
-
-      // if on or after the last page, work out the last row.
-      var lastRow = allData.length <= request.endRow ? data.length : -1;
-
-      return {
-        success: true,
-        rows: rowsThisPage,
-        lastRow: lastRow
-      };
-    }
-  };
-  
-}
-*/
