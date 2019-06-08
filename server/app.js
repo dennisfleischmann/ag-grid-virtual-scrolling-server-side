@@ -7,7 +7,6 @@ var path = require('path');
 let database;
 
 fs.readFile(__dirname + '/data.json', function(err, data) {
-  //console.log('data', data);
 
   var idSequence = 0;
 
