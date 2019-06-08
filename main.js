@@ -39,11 +39,13 @@ document.addEventListener('DOMContentLoaded', function() {
   gridOptions.api.setServerSideDatasource(datasource);
 });
 
+/*
+* Backed Integration Infinite Scrolling
+* API -- getRows(params)
+*/
 function ServerSideDatasource() {
   return {
     getRows(params) {
-      console.log('params.request', params.request);
-      console.log('params', params);
       agGrid.simpleHttpRequest({ url: '/data?startRow='+params.request.startRow+'&endRow='+params.request.endRow }).then(function(response) {
         if (response.success) {
           // call the success callback
